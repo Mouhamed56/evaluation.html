@@ -1,0 +1,11 @@
+/* Couleur de fond du corps de la page */
+body {
+  background-color: #f0f8ff;
+  font-family: Arial, sans-serif;
+}
+
+/* Paragraphe mis en évidence */
+.highlight {
+  color: blue;
+  font-weight: bold;
+}
