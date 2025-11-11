@@ -1,173 +1,221 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Activité Numéro 5 - JavaScript</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Checkpoint Algo — Somme distincte & Produit scalaire</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 30px; background: #f4f4f9; }
-    h2 { color: #2c3e50; border-bottom: 2px solid #ccc; padding-bottom: 5px; }
-    section { background: #fff; padding: 20px; margin-bottom: 30px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
-    input, button { padding: 8px; margin: 5px 0; border-radius: 5px; border: 1px solid #ccc; }
-    button { background: #3498db; color: white; cursor: pointer; }
-    button:hover { background: #2980b9; }
-    p.result { background: #ecf0f1; padding: 8px; border-radius: 5px; }
+    :root{
+      --bg:#0f1320; --surface:#171b2f; --text:#eef1f6; --muted:#a1a8b8;
+      --brand:#6c5ce7; --brand2:#00d1b2; --ring: rgba(108,92,231,.35);
+    }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif; background:var(--bg); color:var(--text); line-height:1.55}
+    .wrap{max-width:980px; margin:auto; padding:26px 20px}
+    h1,h2{margin:0 0 .4rem}
+    h1{font-size:clamp(22px,3.6vw,32px)}
+    h2{font-size:clamp(18px,3vw,24px); margin-top:28px}
+    p{color:var(--muted); margin:.3rem 0 .8rem}
+    .card{
+      background:var(--surface); border:1px solid rgba(255,255,255,.08); border-radius:16px;
+      padding:16px; margin:16px 0; box-shadow:0 10px 30px rgba(0,0,0,.15);
+    }
+    label{display:block; margin:.4rem 0 .2rem; color:#dfe4f2}
+    input[type=text], textarea{
+      width:100%; padding:10px 12px; border-radius:12px; border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.02); color:var(--text); outline:none;
+    }
+    textarea{min-height:110px; resize:vertical}
+    .row{display:grid; gap:12px; grid-template-columns:1fr 1fr}
+    .btn{
+      margin-top:10px; display:inline-block; padding:10px 16px; border-radius:12px; cursor:pointer;
+      background:linear-gradient(180deg,var(--brand),var(--brand2)); color:#fff; border:none;
+    }
+    .btn:hover{box-shadow:0 0 0 4px var(--ring)}
+    .out{margin-top:10px; padding:12px; border-radius:12px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1)}
+    code,kbd{background:rgba(255,255,255,.08); padding:.1rem .4rem; border-radius:6px}
+    small{color:var(--muted)}
+    @media (max-width:700px){ .row{grid-template-columns:1fr} }
   </style>
 </head>
 <body>
-  <h1>Activité Pratique - Objets JavaScript</h1>
+  <div class="wrap">
+    <h1>Checkpoint Algorithme — Deux Problèmes</h1>
+    <p>• <strong>P1</strong> : somme des éléments <em>distincts</em> entre deux ensembles.<br>
+       • <strong>P2</strong> : produit scalaire & test d’orthogonalité (0) — en procédure/fonction.</p>
 
-  <!-- Exercice 1 -->
-  <section>
-    <h2>Exercice 1 : Manipulation de chaînes</h2>
-    <input type="text" id="chaine" placeholder="Saisir une chaîne" oninput="afficherInfosChaine()">
-    <p id="longueur" class="result"></p>
-    <p id="souschaine" class="result"></p>
-  </section>
+    <!-- ===================== PROBLÈME 1 ===================== -->
+    <section class="card">
+      <h2>Problème 1 — Somme des éléments distincts</h2>
+      <p>Saisis deux ensembles sous forme de listes séparées par des virgules (ex. <code>3,1,7,9</code> et <code>2,4,1,9,3</code>).</p>
 
-  <!-- Exercice 2 -->
-  <section>
-    <h2>Exercice 2 : Manipulation de nombres</h2>
-    <input type="number" id="nombre" placeholder="Entrez un nombre" oninput="calculerNombre()">
-    <p id="racine" class="result"></p>
-    <p id="arrondi" class="result"></p>
-    <button onclick="genererAleatoire()">Nombre aléatoire (1-100)</button>
-    <button onclick="genererAleatoire2()">Nombre aléatoire (min-max)</button><br>
-    <input type="number" id="min" placeholder="Min">
-    <input type="number" id="max" placeholder="Max">
-    <p id="alea" class="result"></p>
-  </section>
+      <div class="row">
+        <div>
+          <label for="setA">Ensemble A</label>
+          <input id="setA" type="text" placeholder="ex : 3,1,7,9">
+        </div>
+        <div>
+          <label for="setB">Ensemble B</label>
+          <input id="setB" type="text" placeholder="ex : 2,4,1,9,3">
+        </div>
+      </div>
 
-  <!-- Exercice 3 -->
-  <section>
-    <h2>Exercice 3 : Manipulation de dates</h2>
-    <input type="date" id="dateSaisie" onchange="afficherDate()">
-    <p id="jour" class="result"></p>
-    <p id="mois" class="result"></p>
-    <p id="annee" class="result"></p>
-    <p id="diff" class="result"></p>
-  </section>
+      <button class="btn" id="btnP1">Calculer la somme distincte</button>
+      <div class="out" id="outP1"></div>
 
-  <!-- Exercice 4 -->
-  <section>
-    <h2>Exercice 4 : Horloge en temps réel</h2>
-    <input type="text" id="horloge" readonly>
-  </section>
+      <small>
+        Règle : on additionne les éléments présents dans <em>un seul</em> des deux ensembles (différence symétrique).
+      </small>
+    </section>
 
-  <!-- Exercice 5 -->
-  <section>
-    <h2>Exercice 5 : Manipulation de tableaux</h2>
-    <p id="tableau" class="result"></p>
-    <input type="number" id="nouvelElement" placeholder="Ajouter un nombre">
-    <button onclick="ajouterElement()">Ajouter</button>
-    <input type="number" id="supprimerElement" placeholder="Supprimer ce nombre">
-    <button onclick="supprimerElement()">Supprimer</button>
-    <button onclick="trierTableau()">Trier</button>
-  </section>
+    <!-- ===================== PROBLÈME 2 ===================== -->
+    <section class="card">
+      <h2>Problème 2 — Produit scalaire & orthogonalité</h2>
 
-  <!-- Exercice 6 -->
-  <section>
-    <h2>Exercice 6 : Calculateur de prêt hypothécaire</h2>
-    <input type="number" id="montant" placeholder="Montant du prêt">
-    <input type="number" id="taux" placeholder="Taux d'intérêt annuel (%)">
-    <input type="number" id="annees" placeholder="Durée (années)">
-    <button onclick="calculerPret()">Calculer</button>
-    <p id="paiement" class="result"></p>
-  </section>
+      <!-- Mono-paire -->
+      <div class="card" style="background:rgba(255,255,255,.03)">
+        <h3 style="margin-top:0">Calcul (un seul couple de vecteurs)</h3>
+        <p>Vecteurs de même dimension, saisis en liste (ex. <code>1,2,3</code> et <code>4,5,6</code>).</p>
+
+        <div class="row">
+          <div>
+            <label for="v1">Vecteur v1</label>
+            <input id="v1" type="text" placeholder="ex : 1,0">
+          </div>
+          <div>
+            <label for="v2">Vecteur v2</label>
+            <input id="v2" type="text" placeholder="ex : 0,5">
+          </div>
+        </div>
+
+        <button class="btn" id="btnDotOne">Produit scalaire & orthogonalité</button>
+        <div class="out" id="outDotOne"></div>
+      </div>
+
+      <!-- Multi-paires -->
+      <div class="card" style="background:rgba(255,255,255,.03)">
+        <h3 style="margin-top:0">Évaluer n couples (un couple par ligne)</h3>
+        <p>Format par ligne : <code>a,b,c | x,y,z</code> &nbsp; (v1 | v2)</p>
+        <textarea id="pairs" placeholder="Exemple :
+1,0 | 0,5
+1,1 | 1,-1
+2,3 | 4,5"></textarea>
+        <button class="btn" id="btnDotMany">Évaluer tous les couples</button>
+        <div class="out" id="outDotMany"></div>
+      </div>
+
+      <small>
+        Orthogonaux si <code>produit_scalaire = 0</code> (tolérance flottante appliquée).
+      </small>
+    </section>
+  </div>
 
   <script>
-    // Exercice 1
-    function afficherInfosChaine() {
-      let texte = document.getElementById('chaine').value;
-      document.getElementById('longueur').textContent = 'Longueur : ' + texte.length;
-      document.getElementById('souschaine').textContent = '3 premiers caractères : ' + texte.substring(0,3);
+    // ===================== OUTILS GÉNÉRAUX =====================
+    const parseListOfNumbers = (txt) =>
+      txt.split(',').map(s => s.trim()).filter(s => s.length>0).map(Number);
+
+    const nearZero = (x, eps = 1e-9) => Math.abs(x) <= eps;
+
+    // ===================== PROBLÈME 1 =====================
+    function sommeDistincte(A, B) {
+      let somme = 0;
+
+      // A \ B : ajouter A[i] si absent de B
+      for (let i = 0; i < A.length; i++) {
+        let trouve = false;
+        for (let j = 0; j < B.length; j++) {
+          if (A[i] === B[j]) { trouve = true; break; }
+        }
+        if (!trouve) somme += A[i];
+      }
+
+      // B \ A : ajouter B[j] si absent de A
+      for (let j = 0; j < B.length; j++) {
+        let trouve = false;
+        for (let i = 0; i < A.length; i++) {
+          if (B[j] === A[i]) { trouve = true; break; }
+        }
+        if (!trouve) somme += B[j];
+      }
+
+      return somme;
     }
 
-    // Exercice 2
-    function calculerNombre() {
-      let n = parseFloat(document.getElementById('nombre').value);
-      if (isNaN(n)) return;
-      document.getElementById('racine').textContent = 'Racine carrée : ' + Math.sqrt(n).toFixed(2);
-      document.getElementById('arrondi').textContent = 'Arrondi : ' + Math.round(n);
-    }
-
-    function Aleatoire() { return Math.floor(Math.random() * 100) + 1; }
-    function genererAleatoire() {
-      document.getElementById('alea').textContent = 'Nombre aléatoire (1-100): ' + Aleatoire();
-    }
-
-    function Aleatoire2(min, max) {
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-    function genererAleatoire2() {
-      let min = parseInt(document.getElementById('min').value);
-      let max = parseInt(document.getElementById('max').value);
-      if (isNaN(min) || isNaN(max) || min >= max) {
-        alert('Veuillez entrer des valeurs min et max valides');
+    document.getElementById('btnP1').addEventListener('click', () => {
+      const A = parseListOfNumbers(document.getElementById('setA').value || "");
+      const B = parseListOfNumbers(document.getElementById('setB').value || "");
+      if (A.some(Number.isNaN) || B.some(Number.isNaN)) {
+        document.getElementById('outP1').textContent = "Erreur : vérifie que les deux ensembles contiennent uniquement des nombres séparés par des virgules.";
         return;
       }
-      document.getElementById('alea').textContent = 'Nombre aléatoire ('+min+'-'+max+'): ' + Aleatoire2(min, max);
+      const s = sommeDistincte(A, B);
+      document.getElementById('outP1').innerHTML =
+        `<strong>Somme des éléments distincts :</strong> ${s}`;
+    });
+
+    // ===================== PROBLÈME 2 =====================
+    function dot_product(v1, v2) {
+      if (v1.length !== v2.length) throw new Error("Les vecteurs doivent avoir la même dimension.");
+      let ps = 0;
+      for (let i = 0; i < v1.length; i++) ps += v1[i] * v2[i];
+      return ps;
     }
 
-    // Exercice 3
-    function afficherDate() {
-      let dateStr = document.getElementById('dateSaisie').value;
-      if (!dateStr) return;
-      let date = new Date(dateStr);
-      document.getElementById('jour').textContent = 'Jour : ' + date.getDate();
-      document.getElementById('mois').textContent = 'Mois : ' + (date.getMonth() + 1);
-      document.getElementById('annee').textContent = 'Année : ' + date.getFullYear();
-      let diff = Math.floor((new Date() - date) / (1000 * 60 * 60 * 24));
-      document.getElementById('diff').textContent = 'Différence avec aujourd\'hui : ' + diff + ' jours';
-    }
+    // Monopaire
+    document.getElementById('btnDotOne').addEventListener('click', () => {
+      const v1 = parseListOfNumbers(document.getElementById('v1').value || "");
+      const v2 = parseListOfNumbers(document.getElementById('v2').value || "");
 
-    // Exercice 4
-    function afficherHeure() {
-      let now = new Date();
-      let h = String(now.getHours()).padStart(2,'0');
-      let m = String(now.getMinutes()).padStart(2,'0');
-      let s = String(now.getSeconds()).padStart(2,'0');
-      document.getElementById('horloge').value = `${h}:${m}:${s}`;
-      setTimeout(afficherHeure, 1000);
-    }
-    afficherHeure();
-
-    // Exercice 5
-    let tab = [3, 8, 1, 5];
-    document.getElementById('tableau').textContent = 'Tableau initial : ' + tab.join(', ');
-
-    function ajouterElement() {
-      let val = parseInt(document.getElementById('nouvelElement').value);
-      if (!isNaN(val)) tab.push(val);
-      document.getElementById('tableau').textContent = 'Tableau : ' + tab.join(', ');
-    }
-
-    function supprimerElement() {
-      let val = parseInt(document.getElementById('supprimerElement').value);
-      tab = tab.filter(x => x !== val);
-      document.getElementById('tableau').textContent = 'Tableau : ' + tab.join(', ');
-    }
-
-    function trierTableau() {
-      tab.sort((a,b) => a - b);
-      document.getElementById('tableau').textContent = 'Tableau trié : ' + tab.join(', ');
-    }
-
-    // Exercice 6
-    function calculerPret() {
-      let P = parseFloat(document.getElementById('montant').value);
-      let t = parseFloat(document.getElementById('taux').value);
-      let n = parseInt(document.getElementById('annees').value);
-
-      if (isNaN(P) || P <= 0 || isNaN(t) || t <= 0 || isNaN(n) || n <= 0) {
-        alert('Veuillez entrer des valeurs valides');
+      const out = document.getElementById('outDotOne');
+      if (v1.length === 0 || v2.length === 0 || v1.some(Number.isNaN) || v2.some(Number.isNaN)) {
+        out.textContent = "Erreur : saisis deux vecteurs valides, ex. 1,0 et 0,5";
         return;
       }
-      let r = t / 100 / 12;
-      let nbMois = n * 12;
-      let M = P * (r * Math.pow(1 + r, nbMois)) / (Math.pow(1 + r, nbMois) - 1);
-      document.getElementById('paiement').textContent = 'Paiement mensuel : ' + M.toFixed(2) + ' €';
-    }
+      try{
+        const ps = dot_product(v1, v2);
+        const ortho = nearZero(ps) ? "✅ Orthogonaux" : "❌ Non orthogonaux";
+        out.innerHTML = `<div><strong>Produit scalaire :</strong> ${ps}</div><div>${ortho}</div>`;
+      }catch(e){
+        out.textContent = e.message;
+      }
+    });
+
+    // Multi-paires
+    document.getElementById('btnDotMany').addEventListener('click', () => {
+      const lines = (document.getElementById('pairs').value || "")
+        .split('\n').map(s => s.trim()).filter(s => s.length>0);
+
+      if (lines.length === 0) {
+        document.getElementById('outDotMany').textContent = "Ajoute au moins une ligne au format : a,b | x,y";
+        return;
+      }
+
+      const results = [];
+      for (let idx = 0; idx < lines.length; idx++) {
+        const line = lines[idx];
+        const parts = line.split('|');
+        if (parts.length !== 2) {
+          results.push(`Ligne ${idx+1} : format invalide (utilise "v1 | v2").`);
+          continue;
+        }
+        const v1 = parseListOfNumbers(parts[0]);
+        const v2 = parseListOfNumbers(parts[1]);
+        if (v1.length === 0 || v2.length === 0 || v1.some(Number.isNaN) || v2.some(Number.isNaN)) {
+          results.push(`Ligne ${idx+1} : vecteurs invalides.`);
+          continue;
+        }
+        if (v1.length !== v2.length) {
+          results.push(`Ligne ${idx+1} : dimensions différentes (${v1.length} vs ${v2.length}).`);
+          continue;
+        }
+        const ps = dot_product(v1, v2);
+        const ortho = nearZero(ps) ? "Orthogonaux ✅" : "Non orthogonaux ❌";
+        results.push(`Ligne ${idx+1} → ps = ${ps} → ${ortho}`);
+      }
+
+      document.getElementById('outDotMany').innerHTML = results.map(r => `<div>${r}</div>`).join('');
+    });
   </script>
 </body>
 </html>
